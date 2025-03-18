@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 
 # Configure PostgreSQL connection
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://username:password@localhost/task_manager'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:dripkidzilla@localhost/task_manager'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -15,12 +15,15 @@ class Task(db.Model):
     title = db.Column(db.String(100), nullable=False)
     completed = db.Column(db.Boolean, default=False)
 
-# Create the database
-@app.before_first_request
-def create_tables():
+# Create the database explicitly
+with app.app_context():
     db.create_all()
 
-    # Routes
+# Routes
+@app.route('/')
+def home():
+    return jsonify({"message": "Welcome to the Task Manager API!"})
+
 @app.route('/tasks', methods=['GET'])
 def get_tasks():
     tasks = Task.query.all()
