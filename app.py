@@ -1,7 +1,9 @@
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS  # Import CORS to handle cross-origin requests
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes
 
 # Configure PostgreSQL connection
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:dripkidzilla@localhost/task_manager'
